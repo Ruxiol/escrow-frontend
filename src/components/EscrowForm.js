@@ -3,7 +3,7 @@ import axios from 'axios';
 import Modal from './Modal';  // Ažurirajte putanju prema potrebi
 
 const EscrowForm = () => {
-    const [action, setAction] = useState('sell'); 
+    const [action, setAction] = useState('sell');
     const [usdtAmount, setUsdtAmount] = useState('');
     const [feePercentage, setFeePercentage] = useState(0);
     const [conversionRates, setConversionRates] = useState({});
@@ -43,7 +43,7 @@ const EscrowForm = () => {
         if (!adjustedAmount) return null;
 
         const profitUsd = action === 'sell' ? usdtAmount - adjustedAmount.usd : adjustedAmount.usd - usdtAmount;
-        return profitUsd / conversionRates.USD;  
+        return profitUsd / conversionRates.USD;
     };
 
     const openModal = () => {
@@ -61,7 +61,7 @@ const EscrowForm = () => {
 
             await axios.post('http://localhost:3000/funds/addProfit', {
                 profit,
-                currency: "EUR"  
+                currency: "EUR"
             });
 
             await axios.post('http://localhost:3000/api/transactions', {
@@ -73,9 +73,9 @@ const EscrowForm = () => {
                     km: adjustedAmount.km
                 },
                 profit: profit,
-                currency: "EUR",  
+                currency: "EUR",
                 type: action === 'sell' ? 'Sell' : 'Buy',
-                date: new Date() 
+                date: new Date()
             });
 
             openModal();
@@ -88,26 +88,35 @@ const EscrowForm = () => {
     const profitDisplay = calculateProfit(adjustedAmountDisplay);
 
     return (
-        <div>
-            {/* Ostatak koda... */}
-            <label>Action:</label>
-            <select value={action} onChange={(e) => setAction(e.target.value)}>
-                <option value="sell">Prodaj</option>
-                <option value="buy">Kupi</option>
-            </select>
+        <div className="escrow-form">
+            <h2>Escrow Kalkulator</h2>
 
-            <label>USDT:</label>
-            <input type="number" value={usdtAmount} onChange={(e) => setUsdtAmount(parseFloat(e.target.value))} />
+            <div className="row">
+                <div className="escrow-input-group">
+                    <label>Podesi:</label>
+                    <select value={action} onChange={(e) => setAction(e.target.value)}>
+                        <option value="sell">Prodaj</option>
+                        <option value="buy">Kupi</option>
+                    </select>
+                </div>
 
-            <label>Fee:</label>
-            <select value={feePercentage} onChange={(e) => setFeePercentage(parseFloat(e.target.value))}>
-                <option value={0}>0%</option>
-                <option value={1}>1%</option>
-                <option value={2}>2%</option>
-                <option value={3}>3%</option>
-                <option value={4}>4%</option>
-                <option value={5}>5%</option>
-            </select>
+                <div className="escrow-input-group">
+                    <label>USDT:</label>
+                    <input type="number" value={usdtAmount} onChange={(e) => setUsdtAmount(parseFloat(e.target.value))} />
+                </div>
+
+                <div className="escrow-input-group">
+                    <label>Fee:</label>
+                    <select value={feePercentage} onChange={(e) => setFeePercentage(parseFloat(e.target.value))}>
+                        <option value={0}>0%</option>
+                        <option value={1}>1%</option>
+                        <option value={2}>2%</option>
+                        <option value={3}>3%</option>
+                        <option value={4}>4%</option>
+                        <option value={5}>5%</option>
+                    </select>
+                </div>
+            </div>
 
             {adjustedAmountDisplay && (
                 <div>
@@ -115,7 +124,7 @@ const EscrowForm = () => {
                     <p>{`Isplatiti ${action === 'sell' ? '' : 'Naplatiti'} in USD: ${adjustedAmountDisplay.usd.toFixed(2)}`}</p>
                     <p>{`Isplatiti ${action === 'sell' ? '' : 'Naplatiti'} in EUR: ${adjustedAmountDisplay.eur.toFixed(2)}`}</p>
                     <p>{`Isplatiti ${action === 'sell' ? '' : 'Naplatiti'} in KM: ${adjustedAmountDisplay.km.toFixed(2)}`}</p>
-                    <p>{`My profit in EUR: ${profitDisplay.toFixed(2)}`}</p>  
+                    <p>{`My profit in EUR: ${profitDisplay.toFixed(2)}`}</p>
                     <button onClick={handleCompleted}>Potvrdi!</button>
                 </div>
             )}
@@ -129,4 +138,3 @@ const EscrowForm = () => {
 };
 
 export default EscrowForm;
-

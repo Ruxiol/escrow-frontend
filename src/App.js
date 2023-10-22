@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -11,8 +11,21 @@ import './App.css';
 import Dashboard from './components/Dashboard';
 import TransactionsList from './components/TransactionsList';
 import Funds from './components/Funds';
+import Login from './components/Login';  // Dodajemo Login komponentu koju ćete stvoriti u src/components
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  if (!loggedIn) {
+    return (
+      <Router>
+        <div className="App">
+          <Login onLogin={() => setLoggedIn(true)} />
+        </div>
+      </Router>
+    );
+  }
+
   return (
     <Router>
       <div className="App">

@@ -1,0 +1,72 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const TransactionsList = () => {
+    const [transactions, setTransactions] = useState([]);
+
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/api/transactions');
+                setTransactions(response.data);
+            } catch (error) {
+                console.error('Error fetching transactions:', error);
+            }
+        };
+
+        fetchTransactions();
+    }, []);
+
+    const totalProfitEur = transactions.reduce((acc, transaction) => {
+        if (transaction.profitCurrency === 'EUR') {
+            return acc + transaction.profit;
+        }
+        return acc;
+    }, 0);
+
+    const totalProfitKm = transactions.reduce((acc, transaction) => {
+        if (transaction.profitCurrency === 'KM') {
+            return acc + transaction.profit;
+        }
+        return acc;
+    }, 0);
+
+    return (
+        <div>
+            <h2>Transactions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>USDT</th>
+                        <th>Profit in EUR</th>
+                        <th>Profit in KM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {transactions.map((transaction, index) => {
+                        const profitEur = transaction.profitCurrency === 'EUR' ? transaction.profit.toFixed(2) : '0.00';
+                        const profitKm = transaction.profitCurrency === 'KM' ? transaction.profit.toFixed(2) : '0.00';
+
+                        return (
+                            <tr key={index}>
+                                <td>{new Date(transaction.date).toLocaleDateString()}</td>
+                                <td>{transaction.amount}</td>
+                                <td>{profitEur}</td>
+                                <td>{profitKm}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+            <div>
+                <h3>Total Profits:</h3>
+                <p>Profit in EUR Total: {totalProfitEur.toFixed(2)}</p>
+                <p>Profit in KM Total: {totalProfitKm.toFixed(2)}</p>
+            </div>
+        </div>
+    );
+};
+
+export default TransactionsList;
+

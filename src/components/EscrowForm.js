@@ -124,7 +124,7 @@ const EscrowForm = () => {
                     <p>{`Isplatiti ${action === 'sell' ? '' : 'Naplatiti'} in USD: ${adjustedAmountDisplay.usd.toFixed(2)}`}</p>
                     <p>{`Isplatiti ${action === 'sell' ? '' : 'Naplatiti'} in EUR: ${adjustedAmountDisplay.eur.toFixed(2)}`}</p>
                     <p>{`Isplatiti ${action === 'sell' ? '' : 'Naplatiti'} in KM: ${adjustedAmountDisplay.km.toFixed(2)}`}</p>
-                    <p>{`My profit in EUR: ${profitDisplay.toFixed(2)}`}</p>
+                    <p>{`Profit EUR: ${profitDisplay.toFixed(2)}`}</p>
                     <button onClick={handleCompleted}>Potvrdi!</button>
                 </div>
             )}
